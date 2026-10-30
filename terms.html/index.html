@@ -3,11 +3,35 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Terms of Service</title>
+<title>TikTok OAuth Callback</title>
 <meta name="tiktok-developers-site-verification" content="m57aA19uMO31DHfKt2bP6u2NmQdhVekm">
+<style>
+body{font-family:sans-serif;max-width:600px;margin:40px auto;padding:20px}
+.code{background:#f0f0f0;padding:10px;border-radius:4px;word-break:break-all;font-family:monospace;margin:10px 0;font-size:14px}
+.success{color:green;font-weight:bold}
+.error{color:red;font-weight:bold}
+.copy-btn{padding:8px 16px;margin:10px 0;cursor:pointer}
+</style>
 </head>
 <body>
-<h1>Terms of Service</h1>
-<p>This application is used for TikTok content publishing automation.</p>
+<h1>TikTok Authorization</h1>
+<div id="status"></div>
+<div id="code-block"></div>
+<script>
+const params = new URLSearchParams(window.location.search);
+const code = params.get('code');
+const state = params.get('state');
+const error = params.get('error');
+const statusEl = document.getElementById('status');
+const codeEl = document.getElementById('code-block');
+if (error) {
+  statusEl.innerHTML = '<p class="error">Error: ' + error + '</p>';
+} else if (code) {
+  statusEl.innerHTML = '<p class="success">Authorization successful! Copy the code below.</p>';
+  codeEl.innerHTML = '<p>Your authorization code:</p><div class="code" id="code-text">' + code + '</div><button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById(\'code-text\').textContent)">Copy Code</button><p>Paste it in Hermes to complete the connection.</p>';
+} else {
+  statusEl.innerHTML = '<p>Waiting for TikTok authorization redirect...</p>';
+}
+</script>
 </body>
 </html>
